@@ -1,0 +1,9 @@
+{
+  "name" : "job-thing",
+  "version" : "0.0.1",
+  "dependencies" : {
+    "express" : "3.x",
+    "express3-handlebars": "0.5.x",
+	"mysql": "2.3.2"
+  }
+}
