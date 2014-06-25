@@ -3,7 +3,7 @@ var express = require('express'),
     user_db = require('./user_db.js')
 	app = express();
 
-//app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
