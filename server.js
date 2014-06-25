@@ -18,8 +18,8 @@ app.get('/register', function(req, res){
 	 	email: "colinjameswebb@hotmail.com",
 	 	password: "password1"
 	};
-	user_db.createUser(user, function(err, res){
-		res.render('home', {title: res});
+	user_db.createUser(user, function(err, user){
+		res.render('home', {title: user});
 	});
 });
 

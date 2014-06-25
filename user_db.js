@@ -15,17 +15,15 @@ var connection = mysql.createConnection({
 
 
 /* WARNING: this doesn't hash passwords yet!!! */
+/* Create user with given name, email and password. If successful, returns new user id */
 var createUser = function(user, cb) {
-	connection.connect();
-	
 	connection.query("insert into users(name, email, password) values (?, ?, ?)",
 	 [user.name, user.email, user.password], function(err, results){
 	 	if (err) throw err;
 
 	 	console.log(results);
+		cb(null, results.insertId);
 	});
-	
-	connection.end();
 };
 
 exports.createUser = createUser;
