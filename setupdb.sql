@@ -5,9 +5,12 @@
 
 CREATE DATABASE jobthing;
 
+USE jobthing;
+
 CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(200),
 	email VARCHAR(200),
 	password VARCHAR(200) # TODO: this need hashing
 );
+
