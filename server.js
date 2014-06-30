@@ -12,6 +12,14 @@ app.get('/', function(req, res){
 	res.render('home', {title: "hello"});
 });
 
+app.get('/user/:id', function(req, res){
+	var id = req.params.id;
+
+	user_db.getUser(id, function(err, user){
+		res.render('home', {users: user})
+	});
+});
+
 app.get('/register', function(req, res){
 	var user = {
 		name: "Colin",
@@ -19,6 +27,7 @@ app.get('/register', function(req, res){
 	 	password: "password1"
 	};
 	user_db.createUser(user, function(err, user){
+		if (err) console.log(err);
 		res.render('home', {title: user});
 	});
 });
