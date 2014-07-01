@@ -14,3 +14,11 @@ CREATE TABLE users (
 	password VARCHAR(200) # TODO: this need hashing
 );
 
+CREATE TABLE jobs (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	title VARCHAR(200),
+	link VARCHAR(200),
+	description TEXT,
+	contact_email VARCHAR(200),
+	rate VARCHAR(200)
+);
