@@ -13,6 +13,17 @@ app.get('/', function(req, res){
 	res.render('home', {title: "hello"});
 });
 
+app.post('/', function(req, res){
+	var user = {
+		email: req.body.emailAddress,
+		password: req.body.password
+	};
+	user_db.checkEmailAndPassword(user, function(err, userId){
+		if (err) console.log(err); // need to display this as form error
+		res.redirect('/user/' + userId);
+	});
+});
+
 app.get('/user/:id', function(req, res){
 	var id = req.params.id;
 	user_db.getUser(id, function(err, user){
@@ -31,8 +42,11 @@ app.post('/register', function(req, res){
 		password: req.body.password
 	};
 	user_db.createUser(user, function(err, userId){
-		if (err) console.log(err);
-		res.redirect('/user/' + userId);
+		if (err) {
+			console.log(err);
+		} else {
+			res.redirect('/user/' + userId);	
+		}
 	});
 });
 

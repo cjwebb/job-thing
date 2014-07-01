@@ -51,5 +51,22 @@ var getUser = function(userId, cb) {
 	});
 };
 
+// this needs hashing stuff too
+var checkEmailAndPassword = function(user, cb){
+	connection.query("select * from users where email = ? and password = ?",
+		[user.email, user.password], function(err, results){
+			if (err) {
+				cb(err);
+			} else {
+				if (results.length === 1) {
+					cb(null, results[0]['id']);
+				} else {
+					cb(new Error("There are no users matching this email/password. Or too many..."));
+				}				
+			}
+		});
+};
+
 exports.createUser = createUser;
 exports.getUser = getUser;
+exports.checkEmailAndPassword = checkEmailAndPassword;
