@@ -9,6 +9,7 @@
     "express" : "4.x",
     "body-parser": "1.x",
     "express3-handlebars": "0.5.x",
-	  "mysql": "2.3.2"
+	"mysql": "2.3.2",
+    "bcrypt": "0.7.8"
   }
 }

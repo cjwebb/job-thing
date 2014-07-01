@@ -1,4 +1,5 @@
 var config = require('./config.js');
+var hasher = require('./auth/hasher.js');
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -27,7 +28,6 @@ var userWithEmailExists = function(emailAddress, cb) {
 	});
 };
 
-/* WARNING: this doesn't hash passwords yet!!! */
 /* Create user with given name, email and password. If successful, returns new user id */
 var createUser = function(user, cb) {
 	userWithEmailExists(user.email, function(err, exists){
@@ -36,10 +36,15 @@ var createUser = function(user, cb) {
 		if (exists) {
 			cb(new Error("Email address already in use"));
 		} else {
-			connection.query("insert into users(name, email, password) values (?, ?, ?)",
-	 			[user.name, user.email, user.password], function(err, results){
-					cb(err, results.insertId);
-			});
+
+            hasher.cryptPassword(user.password, function(err, hash) {
+                if (err) { return cb(err); }
+
+			    connection.query("insert into users(name, email, password) values (?, ?, ?)",
+	 			    [user.name, user.email, hash], function(err, results){
+					    cb(err, results.insertId);
+			    });
+            });
 		}
 	});
 };
