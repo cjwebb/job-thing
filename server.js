@@ -1,7 +1,8 @@
 var express = require('express'),
 	bodyParser = require('body-parser'),
     exphbs  = require('express3-handlebars'),
-    user_db = require('./user_db.js')
+    user_db = require('./user_db.js'),
+    job_db = require('./job_db.js'),
 	app = express();
 
 app.use(express.static(__dirname + '/public'));
@@ -47,6 +48,30 @@ app.post('/register', function(req, res){
 		} else {
 			res.redirect('/user/' + userId);	
 		}
+	});
+});
+
+app.get('/jobs/create', function(req, res){
+	res.render('createJob');
+});
+
+app.post('/jobs/create', function(req, res){
+	var job = {
+		title: req.body.title,
+		link: req.body.link,
+		description: req.body.description,
+		contactEmail: req.body.contactEmail,
+		rate: req.body.rate
+	};
+	job_db.createJob(job, function(err, jobId){
+		res.redirect('/jobs/' + jobId); // todo: maybe we should generate a good permalink for this?
+	});
+});
+
+app.get('/jobs/:id', function(req, res){
+	var id = req.params.id;
+	job_db.getJob(id, function(err, jobs){
+		res.render("job", {jobs: jobs});
 	});
 });
 
