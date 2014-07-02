@@ -11,7 +11,7 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function(req, res){
-	res.render('home', {title: "hello"});
+	res.render('home', {title: "Job Thing"});
 });
 
 app.post('/', function(req, res){
