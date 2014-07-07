@@ -3,12 +3,18 @@ var express = require('express'),
     exphbs  = require('express3-handlebars'),
     user_db = require('./user_db.js'),
     job_db = require('./job_db.js'),
+    session = require('express-session'),
 	app = express();
 
 app.use(express.static(__dirname + '/public'));
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+    secret: 'Node is for losers.'
+}));
 
 app.get('/', function(req, res){
 	res.render('home', {title: "Job Thing"});
@@ -20,12 +26,32 @@ app.post('/', function(req, res){
 		password: req.body.password
 	};
 	user_db.checkEmailAndPassword(user, function(err, userId){
-		if (err) console.log(err); // need to display this as form error
-		res.redirect('/user/' + userId);
+		if (err) { console.log(err); } // need to display this as form error
+		
+        req.session.regenerate(function(){
+            user.id = userId;
+            req.session.user = user;
+            res.redirect('/user/' + userId);
+        });
+        
 	});
 });
 
-app.get('/user/:id', function(req, res){
+function restrict(req, res, next) {
+    console.log("sess:" + req.session.user)
+    if (req.session.user){ console.log("sess id:" + req.session.user.id + " req.para:" + req.params.id);}
+    
+    if (req.session.user && 
+        req.session.user.id == req.params.id) {
+        next();
+    } else {
+        console.log('Access denied!');
+        res.redirect('/');
+    }
+}
+
+
+app.get('/user/:id', restrict, function(req, res){
 	var id = req.params.id;
 	user_db.getUser(id, function(err, user){
 		res.render('user', {users: user})
@@ -46,8 +72,12 @@ app.post('/register', function(req, res){
 		if (err) {
 			console.log(err);
 		} else {
-			res.redirect('/user/' + userId);	
-		}
+            req.session.regenerate(function(){
+                user.id = userId;
+                req.session.user = user;
+                res.redirect('/user/' + userId);
+            });
+        }
 	});
 });
 
