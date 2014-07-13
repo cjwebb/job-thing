@@ -23,5 +23,11 @@ var getJob = function(jobId, cb){
 		});
 };
 
+/* TODO: Make this userId specific, only see jobs relevant to you. */
+exports.getJobs = function(cb) {
+    connection.query("select * from jobs",
+        function(err, results) { cb(err, results); } );
+}
+
 exports.createJob = createJob;
 exports.getJob = getJob;
