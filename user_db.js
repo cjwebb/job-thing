@@ -68,7 +68,7 @@ var checkEmailAndPassword = function(user, cb){
                     
                     hasher.comparePassword(user.password, results[0]['password'], function(err, passwordmatch) { 
                         if (passwordmatch) { 
-                            cb(null, results[0]['id']); 
+                            cb(null, results[0]); 
                         } else { 
                             cb(new Error("Incorrect password")); 
                         }
